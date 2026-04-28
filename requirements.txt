@@ -1,0 +1,17 @@
+# Data Collection
+yfinance
+GoogleNews
+pandas
+numpy
+finnhub-python
+
+# AI & Machine Learning (FinBERT & LSTM)
+torch
+transformers
+scikit-learn
+tensorflow
+joblib
+
+# Web App & Visualization
+streamlit
+matplotlib
