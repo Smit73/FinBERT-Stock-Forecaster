@@ -27,7 +27,7 @@ def train_model(ticker):
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
     df = df.dropna()
     
-    feature_cols = ['Log_Return', 'sentiment', 'SMA_50', 'RSI']
+    feature_cols = ['Log_Return', 'sentiment', 'SMA_50_Ratio', 'RSI']
     
     # 2. SCALING FIX: Use StandardScaler
     # This centers the data around 0. Mean = 0, Std Dev = 1.

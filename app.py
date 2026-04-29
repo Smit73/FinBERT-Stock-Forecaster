@@ -48,6 +48,8 @@ else:
     df = stock.history(period="2y")
     
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
+    # FIX: Added the Ratio calculation 
+    df['SMA_50_Ratio'] = df['Close'] / df['SMA_50']
     df['RSI'] = calculate_rsi(df['Close'])
     df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
     df = df.dropna()
@@ -57,10 +59,10 @@ else:
     else:
         # 1. LSTM PREDICTION (TOMORROW) 
         # We assume Sentiment is 0.0 (Neutral) for now unless connected to live news
-        last_60 = df[['Log_Return', 'SMA_50', 'RSI']].copy()
+        last_60 = df[['Log_Return', 'SMA_50_Ratio', 'RSI']].copy()
         last_60['sentiment'] = 0.0 # Placeholder
         # Reorder columns to match training: [Log_Return, sentiment, SMA_50, RSI]
-        last_60 = last_60[['Log_Return', 'sentiment', 'SMA_50', 'RSI']].tail(60).values
+        last_60 = last_60[['Log_Return', 'sentiment', 'SMA_50_Ratio', 'RSI']].tail(60).values
         
         last_60_scaled = scaler.transform(last_60)
         last_60_seq = last_60_scaled.reshape(1, 60, 4)

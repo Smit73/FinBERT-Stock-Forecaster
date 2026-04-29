@@ -57,7 +57,8 @@ def prepare_data(ticker):
     
     # SMA_50: Average of the last 50 days
     merged_df['SMA_50'] = merged_df['Close'].rolling(window=50).mean()
-    
+    # Convert raw dollars into a percentage ratio
+    merged_df['SMA_50_Ratio'] = merged_df['Close'] / merged_df['SMA_50'] #NEW last change
     # RSI: The momentum
     merged_df['RSI'] = calculate_rsi(merged_df['Close'])
     
