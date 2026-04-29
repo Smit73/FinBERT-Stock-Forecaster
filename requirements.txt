@@ -1,5 +1,5 @@
 # Data Collection
-yfinance
+yfinance>=0.2.40
 GoogleNews
 pandas
 numpy
