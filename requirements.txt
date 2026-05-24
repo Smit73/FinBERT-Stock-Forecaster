@@ -2,7 +2,7 @@
 yfinance>=0.2.40
 GoogleNews
 pandas
-numpy
+numpy<2.0
 finnhub-python
 
 # AI & Machine Learning (FinBERT & LSTM)
