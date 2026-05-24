@@ -3,10 +3,19 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import os
 
- #Load the AI model FinBERT
-print("Loading FinBERT model...")
-tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
+# LAZY LOADING FIX 
+# Do NOT load the model out here in the open. 
+# We set them to None, and only load them when needed.
+tokenizer = None
+model = None
+
+def load_finbert():
+    """Loads the model into memory ONLY when called."""
+    global tokenizer, model
+    if tokenizer is None or model is None:
+        print("Loading FinBERT model...")
+        tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+        model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
 
 def estimate_sentiment(news_list):
     """
@@ -14,7 +23,8 @@ def estimate_sentiment(news_list):
     Output: A DataFrame with the original text and its sentiment score.
     """
     if not news_list: return []
-    
+    #  CRITICAL: Turn on the AI only right before we need it
+    load_finbert()
     # CONFIG
     # Process 50 articles at a time. 
     # If you still crash, lower this to 20.

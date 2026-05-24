@@ -2,14 +2,15 @@
 yfinance>=0.2.40
 GoogleNews
 pandas
-numpy<2.0
+numpy
 finnhub-python
 
 # AI & Machine Learning (FinBERT & LSTM)
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
 transformers
 scikit-learn
-tensorflow
+tensorflow-cpu
 joblib
 
 # Web App & Visualization
