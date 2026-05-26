@@ -8,6 +8,7 @@ finnhub-python
 # AI & Machine Learning (FinBERT & LSTM)
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
+torchvision
 transformers
 scikit-learn
 tensorflow-cpu
