@@ -8,6 +8,7 @@ import yfinance as yf
 from tensorflow.keras.models import load_model
 from datetime import timedelta, date
 import pipeline 
+import requests
 
 st.set_page_config(page_title="AI Stock Sniper", layout="wide")
 st.title("AI Stock Predictor: Deep Learning + Monte Carlo")
@@ -44,8 +45,28 @@ else:
         st.stop()
     
     # Get Data
-    stock = yf.Ticker(ticker)
-    df = stock.history(period="2y")
+    # Stealthy way
+    @st.cache_data(ttl=3600)
+    def fetch_price_data(ticker_symbol):
+        try:
+            # Create a session that mimics a real Google Chrome browser
+            session = requests.Session()
+            session.headers.update({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+            })
+            # Pass the fake browser session to yfinance
+            stock = yf.Ticker(ticker_symbol, session=session)
+            return stock.history(period="2y")
+        except Exception as e:
+            return pd.DataFrame()
+
+    # Call the new function
+    with st.spinner("Downloading Market Data..."):
+        df = fetch_price_data(ticker)
+
+    if df.empty:
+        st.error("❌ Yahoo Finance is temporarily blocking this server. Please try again in 10 minutes.")
+        st.stop()
     
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
     # FIX: Added the Ratio calculation 

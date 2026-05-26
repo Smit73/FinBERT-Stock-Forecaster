@@ -4,6 +4,7 @@ import time
 import yfinance as yf
 from datetime import datetime, timedelta
 import streamlit as st
+import requests
 
 # CONFIG
 #  KEY
@@ -36,12 +37,17 @@ def fetch_data_for_symbol(ticker):
     
     print(f"   Timeframe: {start_date} to {end_date}")
 
-    # 2. Get Price Data
-    print("   Downloading Price Data...")
+    # 2. Get Price Data (Stealthy way)
+    print("   📉 Downloading Price Data...")
     try:
-        prices = yf.Ticker(ticker).history(start=start_date, end=end_date)
+        session = requests.Session()
+        session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+        })
+        prices = yf.Ticker(ticker, session=session).history(start=start_date, end=end_date)
+        
         if prices.empty:
-            print("      ❌ No price data found (empty dataframe).")
+            print("      ❌ No price data found. Yahoo might be blocking the request.")
             return False
         prices.to_csv(f"{ticker}_prices.csv")
     except Exception as e:
